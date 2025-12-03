@@ -10,9 +10,19 @@
 </ul>
 
 <h1>Añadir ingredientes:</h1>
+{% comment %} 
+1ºForma: Salen los ingrediente y se podian añadir
 <ul>
 {% for ingrediente in ingredientes %}
     <li>{{ ingrediente.nombre }} <a href="{% url 'receta_agregar_ingrediente' receta.pk ingrediente.pk %}">Añadir</a></li>
 {% endfor %}
-</ul>
+</ul> {% endcomment %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="submit" value="Añadir">
+    </form>
+
 {% endblock %}

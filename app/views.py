@@ -73,10 +73,25 @@ def recetas_lista(request):
     recetas = Receta.objects.all()
     return render(request, 'app/recetas_lista.html', {'recetas':recetas})
 
+# 1ºForma
+# def receta_detalle(request, pk):
+#     receta = get_object_or_404(Receta, pk=pk)
+#     ingredientes = Ingrediente.objects.all()
+#     return render(request, 'app/receta_detalle.html', {'receta':receta, 'ingredientes':ingredientes})
+
+
 def receta_detalle(request, pk):
     receta = get_object_or_404(Receta, pk=pk)
-    ingredientes = Ingrediente.objects.all()
-    return render(request, 'app/receta_detalle.html', {'receta':receta, 'ingredientes':ingredientes})
+    form = IngredienteRecetasForm()
+
+    if request.method == 'POST':
+        form = IngredienteRecetasForm(request.POST)
+        if form.is_valid():
+            form.instance.receta = receta
+            form.save()
+            return redirect('receta_detalle', pk=pk)
+   
+    return render(request, 'app/receta_detalle.html', {'receta':receta, 'form':form})
 
 def receta_agregar_ingrediente(request, receta_pk, ingrediente_pk):
     receta = get_object_or_404(Receta, pk=receta_pk)
